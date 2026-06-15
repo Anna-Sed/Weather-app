@@ -5,6 +5,7 @@ const cityTitle = document.querySelector('.current__weather-city')
 const weatherTemp = document.querySelector('.current__weater-temp')
 const humidityValue = document.querySelector('.humidity-desc-value')
 const windValue = document.querySelector('.wind-desc-value')
+const WeatherImg = document.querySelector('.weather__img')
 
 const state = {
     cityName: '',
@@ -16,12 +17,34 @@ const state = {
     }
 }
 
+const getImg = (status) => {
+    if (status === 800 ) {
+        return 'sun.png'
+    }
+    else if (Math.floor(status / 10) === 80) {
+        return 'cloudy-sun.png'
+    }
+    else {
+        const group = Math.floor(status / 100)
+        switch (group) {
+            case 2: return 'lightning-rain.png'
+            case 3: return 'heavy-rain.png'
+            case 5: return 'heavy-rain.png'
+            case 6: return 'snow.png'
+            case 7: return 'fog.png'
+        }
+    }
+}
+
 const render = () => {
     const { temp, humidity, windSpeed, status } =  state.weatherInfo
     cityTitle.textContent = state.cityName
     weatherTemp.textContent = `${temp}°c`
     humidityValue.textContent = `${humidity}%`
     windValue.textContent = `${windSpeed}m/h`
+    const pathImg = getImg(status)
+    console.log('Путь картинки из функции = ', pathImg)
+    WeatherImg.src = `./../img/${pathImg}`
 }
 
 const getGeo = async (city) => {
@@ -51,7 +74,7 @@ const getWeather = async ({ lat, lon }) => {
         const humidity = data.main.humidity
         const windSpeed = data.wind.speed
         const temp = Math.round(data.main.temp)
-        const status = data.weather[0]['main']
+        const status = data.weather[0]['id']
         return { temp, humidity, windSpeed, status }
     }
     catch (e) {
@@ -70,7 +93,7 @@ form.addEventListener('submit', async (e) => {
     const coordinates = await getGeo(cityName)
     console.log('Координаты вернулись = ', coordinates)
     const { temp, humidity, windSpeed, status } = await getWeather(coordinates)
-    console.log('Возврат погоды = ',{ temp, humidity, windSpeed })
+    console.log('Возврат погоды = ',{ temp, humidity, windSpeed, status })
 
     state.cityName = formData.get('city')
     state.weatherInfo = {
