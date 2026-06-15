@@ -8,7 +8,7 @@ body {
 .weather {
     max-width: 320px;
     max-height: 400px;
-    margin: 100px auto;
+    margin: auto;
 
     display: flex;
     flex-direction: column;
@@ -20,7 +20,7 @@ body {
 }
 
 .form {
-    margin: 30px 20px 14px;
+    margin: 30px 20px 20px;
     display: flex;
     align-items: stretch;
     height: 40px;
